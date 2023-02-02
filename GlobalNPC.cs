@@ -3,6 +3,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 
+using DALib.Checks;
+
 namespace Aggression
 {
     public class GNPC : GlobalNPC {
@@ -18,8 +20,8 @@ namespace Aggression
 
 		public override void AI(NPC npc) {
 			if (AITime++ % 30 == 0 || Updates == 0) { // only set once per 30 ticks
-				Updates = (NPCID.Sets.ProjectileNPC[npc.type] ? (npc.friendly ? Config.Server.ProjectileUpdates : Config.Server.EnemyProjectileUpdates) : Checks.IsBossOrPieceOrChildOf(npc) ? Config.Server.BossUpdates : Config.Server.NPCUpdates);
-				Speed = (NPCID.Sets.ProjectileNPC[npc.type] ? (npc.friendly ? Config.Server.ProjectileSpeed : Config.Server.EnemyProjectileSpeed) : Checks.IsBossOrPieceOrChildOf(npc) ? Config.Server.BossSpeed : Config.Server.NPCSpeed);
+				Updates = (NPCID.Sets.ProjectileNPC[npc.type] ? (npc.friendly ? Config.Server.ProjectileUpdates : Config.Server.EnemyProjectileUpdates) : npc.IsBossOrPieceOrChildOf() ? Config.Server.BossUpdates : Config.Server.NPCUpdates);
+				Speed = (NPCID.Sets.ProjectileNPC[npc.type] ? (npc.friendly ? Config.Server.ProjectileSpeed : Config.Server.EnemyProjectileSpeed) : npc.IsBossOrPieceOrChildOf() ? Config.Server.BossSpeed : Config.Server.NPCSpeed);
 			}
 			if ((Updates == 1 || AITime % Updates > 0) && Speed > 1) {
 				for (int i = 1; i < Speed; i++) {
